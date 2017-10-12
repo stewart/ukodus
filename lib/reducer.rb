@@ -33,13 +33,31 @@ class RowReducer < SimpleReducer
     @row = row
   end
 
-  # FIXME this isn't right
   def each_position
     (0...9).flat_map do |row|
       (0...9).map do |col|
         [row, col]
       end
-    end.reverse
+    end.sort_by do |position|
+      position.first == @row ? 0 : 1
+    end
+  end
+end
+
+class ColumnReducer < SimpleReducer
+  def initialize(sudoku, column)
+    @sudoku = sudoku
+    @column = column
+  end
+
+  def each_position
+    (0...9).flat_map do |row|
+      (0...9).map do |col|
+        [row, col]
+      end
+    end.sort_by do |position|
+      position.last == @column ? 0 : 1
+    end
   end
 end
 
@@ -61,7 +79,8 @@ class Reducer < BaseReducer
   def solutions
     [
       100.times.map { RandomReducer.new(@sudoku).reduce },
-      (0...9).map { |row| RowReducer.new(@sudoku, row).reduce }
+      (0...9).map { |row| RowReducer.new(@sudoku, row).reduce },
+      (0...9).map { |col| ColumnReducer.new(@sudoku, col).reduce }
     ].flatten
   end
 end
