@@ -131,4 +131,8 @@ class Sudoku
     require_relative './solver'
     Solver.new(self).solve
   end
+
+  def ==(other)
+    rows == other.rows
+  end
 end
