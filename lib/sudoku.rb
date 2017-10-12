@@ -31,6 +31,10 @@ class Sudoku
     rows.flatten.compact.count
   end
 
+  def score
+    81 - count
+  end
+
   def row(n)
     rows[n]
   end
