@@ -70,9 +70,11 @@ class Sudoku
   end
 
   def set(column, row, value)
-    cloned_rows = rows.map(&:dup)
-    cloned_rows[row][column] = value
-    self.class.new cloned_rows
+    before = rows[0...row]
+    after = rows[(row+1)...9]
+    row = self.row(row).dup
+    row[column] = value
+    self.class.new [*before, row, *after]
   end
 
   def remove(column, row)
