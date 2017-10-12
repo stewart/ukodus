@@ -69,10 +69,14 @@ class Sudoku
       self.box(column, row)
   end
 
-  def remove(column, row)
+  def set(column, row, value)
     cloned_rows = rows.map(&:dup)
-    cloned_rows[row][column] = nil
+    cloned_rows[row][column] = value
     self.class.new cloned_rows
+  end
+
+  def remove(column, row)
+    set(column, row, nil)
   end
 
   def boxes
