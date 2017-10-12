@@ -1,4 +1,4 @@
-require 'problems'
+require_relative './problems'
 
 class Sudoku
   attr_reader :rows
