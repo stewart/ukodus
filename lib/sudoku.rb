@@ -37,10 +37,10 @@ class Sudoku
   end
 
   def boxes
-    [0..2, 3..5, 6..8].flat_map do |rows|
-      [0..2, 3..5, 6..8].map do |cols|
-        rows.flat_map do |row|
-          rows[row][cols]
+    [0..2, 3..5, 6..8].flat_map do |rs|
+      [0..2, 3..5, 6..8].map do |cs|
+        rows[rs].flat_map do |row|
+          row[cs]
         end
       end
     end
