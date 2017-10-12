@@ -21,6 +21,10 @@ class Sudoku
     @rows[0].zip(*@rows[1..9])
   end
 
+  def at(column, row)
+    @rows.fetch(row).fetch(column)
+  end
+
   def remove(column, row)
     cloned_rows = Marshal.load(Marshal.dump(@rows))
     cloned_rows[row][column] = nil
