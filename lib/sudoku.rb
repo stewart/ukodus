@@ -77,6 +77,17 @@ class Sudoku
     self.class.new [*before, row, *after]
   end
 
+  def each_missing
+    return enum_for(__method__) unless block_given?
+
+    (0...9).each do |r|
+      (0...9).each do |c|
+        next if at(r, c)
+        yield c, r
+      end
+    end
+  end
+
   def remove(column, row)
     set(column, row, nil)
   end
