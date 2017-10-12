@@ -4,7 +4,7 @@ class BaseReducer
   end
 end
 
-class RandomReducer < BaseReducer
+class SimpleReducer < BaseReducer
   def reduce
     best = @sudoku
     each_position.each do |row, col|
@@ -15,13 +15,15 @@ class RandomReducer < BaseReducer
     end
     best
   end
+end
 
+class RandomReducer < SimpleReducer
   def each_position
     (0...9).flat_map do |row|
       (0...9).map do |col|
         [row, col]
       end
-    end.reverse
+    end.shuffle
   end
 end
 
