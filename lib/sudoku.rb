@@ -102,6 +102,6 @@ class Sudoku
   end
 
   def inspect
-    "#<Sudoku:%x \n%s>" % [object_id, to_s]
+    "#<Sudoku:%x score:%d \n%s>" % [object_id, score, to_s]
   end
 end
