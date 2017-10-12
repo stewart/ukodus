@@ -16,6 +16,7 @@ task :solutions => :env do
     solution = Reducer.new(sudoku).reduce
     puts "\n\n"
     puts solution
+    puts "SCORE: #{solution.score}"
     score += solution.score
   end
   puts "\n\nFINAL SCORE #{score}"
