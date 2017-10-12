@@ -82,7 +82,7 @@ class Sudoku
 
     (0...9).each do |r|
       (0...9).each do |c|
-        next if at(r, c)
+        next if at(c, r)
         yield c, r
       end
     end
