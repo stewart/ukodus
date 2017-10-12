@@ -1,3 +1,5 @@
+require 'pmap'
+
 class BaseReducer
   def initialize(sudoku)
     @sudoku = sudoku
@@ -77,7 +79,7 @@ class Reducer < BaseReducer
   def reduce
     best = @sudoku
 
-    each_solution do |solution|
+    solutions.each do |solution|
       if solution.score > best.score
         best = solution
       end
@@ -88,10 +90,12 @@ class Reducer < BaseReducer
 
   private
 
-  def each_solution
-    RANDOM_PASSES.times { yield RandomRowsFirstReducer.new(@sudoku).reduce }
-    RANDOM_PASSES.times { yield RandomColsFirstReducer.new(@sudoku).reduce }
-    (0...9).each { |row| yield RowReducer.new(@sudoku, row).reduce }
-    (0...9).each { |col| yield ColumnReducer.new(@sudoku, col).reduce }
+  def solutions
+    [
+      RANDOM_PASSES.times.map { RandomRowsFirstReducer.new(@sudoku) },
+      RANDOM_PASSES.times.map { RandomColsFirstReducer.new(@sudoku) },
+      (0...9).map { |row| RowReducer.new(@sudoku, row) },
+      (0...9).map { |col| ColumnReducer.new(@sudoku, col) }
+    ].flatten.pmap(&:reduce)
   end
 end
