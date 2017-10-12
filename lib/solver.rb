@@ -18,7 +18,7 @@ class Solver
 
   def fill_in_known(sudoku)
     sudoku.each_missing do |col, row|
-      possibilities = sudoku.possiblities_for(col, row)
+      possibilities = sudoku.possibilities_for(col, row)
 
       if possibilities.count == 1
         sudoku = sudoku.set(col, row, possibilities[0])

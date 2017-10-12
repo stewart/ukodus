@@ -9,7 +9,7 @@ class SimpleReducer < BaseReducer
     best = @sudoku
     each_position.each do |row, col|
       current = best.remove(col, row)
-      if current.possiblities_for(col, row).count == 1
+      if current.possibilities_for(col, row).count == 1
         best = current
       end
     end
