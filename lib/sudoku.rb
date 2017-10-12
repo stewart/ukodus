@@ -31,9 +31,9 @@ class Sudoku
   end
 
   def remove(column, row)
-    cloned_rows = Marshal.load(Marshal.dump(@rows))
+    cloned_rows = rows.map(&:dup)
     cloned_rows[row][column] = nil
-    Sudoku.new cloned_rows
+    self.class.new cloned_rows
   end
 
   def boxes
@@ -50,7 +50,9 @@ class Sudoku
     divider = "+-------+-------+-------+\n"
 
     divider + rows.map do |row|
-      row.each_slice(3).map do |x|
+      row.map do |val|
+        val.nil?? " " : val.to_s
+      end.each_slice(3).map do |x|
         x.join(" ")
       end.join(" | ")
     end.map do |row|
