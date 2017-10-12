@@ -17,10 +17,20 @@ class SimpleReducer < BaseReducer
   end
 end
 
-class RandomReducer < SimpleReducer
+class RandomRowsFirstReducer < SimpleReducer
   def each_position
     (0...9).to_a.shuffle.flat_map do |row|
       (0...9).to_a.shuffle.map do |col|
+        [row, col]
+      end
+    end
+  end
+end
+
+class RandomColsFirstReducer < SimpleReducer
+  def each_position
+    (0...9).to_a.shuffle.map do |col|
+      (0...9).to_a.shuffle.flat_map do |row|
         [row, col]
       end
     end
@@ -78,7 +88,8 @@ class Reducer < BaseReducer
 
   def solutions
     [
-      100.times.map { RandomReducer.new(@sudoku).reduce },
+      100.times.map { RandomRowsFirstReducer.new(@sudoku).reduce },
+      100.times.map { RandomColsFirstReducer.new(@sudoku).reduce },
       (0...9).map { |row| RowReducer.new(@sudoku, row).reduce },
       (0...9).map { |col| ColumnReducer.new(@sudoku, col).reduce }
     ].flatten
