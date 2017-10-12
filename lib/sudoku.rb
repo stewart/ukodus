@@ -27,7 +27,8 @@ class Sudoku
 
   def valid?
     rows.all? { |row| row.compact.length == row.uniq.compact.length } &&
-    columns.all? { |column| column.compact.length == column.uniq.compact.length }
+    columns.all? { |column| column.compact.length == column.uniq.compact.length } &&
+    boxes.all? { |box| box.compact.length == box.uniq.compact.length }
   end
 
   def remove(column, row)
