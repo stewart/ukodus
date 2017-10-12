@@ -3,6 +3,8 @@ require_relative './problems'
 class Sudoku
   attr_reader :rows
 
+  DIGITS = (1..9).to_a.freeze
+
   def self.all
     PROBLEMS.map do |problem|
       new problem
@@ -14,7 +16,7 @@ class Sudoku
   end
 
   def initialize(rows)
-    @rows = rows
+    @rows = rows.map(&:freeze).freeze
   end
 
   def columns
@@ -29,10 +31,33 @@ class Sudoku
     rows.flatten.compact.count
   end
 
+  def row(n)
+    rows[n]
+  end
+
+  def column(n)
+    columns[n]
+  end
+  alias_method :col, :column
+
+  def box(column, row)
+    column /= 3
+    row /= 3
+    boxes[row * 3 + column]
+  end
+
   def valid?
     rows.all? { |row| row.compact.length == row.uniq.compact.length } &&
     columns.all? { |column| column.compact.length == column.uniq.compact.length } &&
     boxes.all? { |box| box.compact.length == box.uniq.compact.length }
+  end
+
+  def possiblities_for(column, row)
+    return [at(column, row)] if at(column, row)
+    DIGITS -
+      self.column(column) -
+      self.row(row) -
+      self.box(column, row)
   end
 
   def remove(column, row)
