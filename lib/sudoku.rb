@@ -121,4 +121,14 @@ class Sudoku
   def inspect
     "#<Sudoku:%x score:%d \n%s>" % [object_id, score, to_s]
   end
+
+  def reduce
+    require_relative './reducer'
+    Reducer.new(self).reduce
+  end
+
+  def solve
+    require_relative './solver'
+    Solver.new(self).solve
+  end
 end

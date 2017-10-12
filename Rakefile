@@ -2,6 +2,7 @@ task :env do
   $LOAD_PATH.unshift 'lib'
   require 'sudoku'
   require 'reducer'
+  require 'solver'
   require 'pry'
 end
 
