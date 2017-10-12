@@ -72,7 +72,7 @@ class ColumnReducer < SimpleReducer
 end
 
 class Reducer < BaseReducer
-  RANDOM_PASSES = 1000
+  RANDOM_PASSES = ENV['ITERATIONS'] ? ENV['ITERATIONS'].to_i : 1000
 
   def reduce
     best = @sudoku
