@@ -132,6 +132,10 @@ class Sudoku
     Solver.new(self).solve
   end
 
+  def solved?
+    score == 0 && valid?
+  end
+
   def ==(other)
     rows == other.rows
   end
