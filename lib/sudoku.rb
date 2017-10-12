@@ -25,6 +25,11 @@ class Sudoku
     @rows.fetch(row).fetch(column)
   end
 
+  def valid?
+    rows.all? { |row| row.compact.length == row.uniq.compact.length } &&
+    columns.all? { |column| column.compact.length == column.uniq.compact.length }
+  end
+
   def remove(column, row)
     cloned_rows = Marshal.load(Marshal.dump(@rows))
     cloned_rows[row][column] = nil
