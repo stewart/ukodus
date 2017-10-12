@@ -19,3 +19,5 @@ task :solutions => :env do
   end
   puts "\n\nFINAL SCORE #{score}"
 end
+
+task default: :solutions
