@@ -17,64 +17,22 @@ class SimpleReducer < BaseReducer
   end
 end
 
-class RandomRowsFirstReducer < SimpleReducer
-  def each_position
-    (0...9).to_a.shuffle.flat_map do |row|
-      (0...9).to_a.shuffle.map do |col|
-        [row, col]
-      end
+class RandomReducer < SimpleReducer
+  ALL_POSITIONS = (0...9).to_a.flat_map do |row|
+    (0...9).to_a.map do |col|
+      [row, col]
     end
-  end
-end
-
-class RandomColsFirstReducer < SimpleReducer
-  def each_position
-    (0...9).to_a.shuffle.map do |col|
-      (0...9).to_a.shuffle.flat_map do |row|
-        [row, col]
-      end
-    end
-  end
-end
-
-class RowReducer < SimpleReducer
-  def initialize(sudoku, row)
-    @sudoku = sudoku
-    @row = row
-  end
+  end.freeze
 
   def each_position
-    (0...9).flat_map do |row|
-      (0...9).map do |col|
-        [row, col]
-      end
-    end.sort_by do |position|
-      position.first == @row ? 0 : 1
-    end
-  end
-end
-
-class ColumnReducer < SimpleReducer
-  def initialize(sudoku, column)
-    @sudoku = sudoku
-    @column = column
-  end
-
-  def each_position
-    (0...9).flat_map do |row|
-      (0...9).map do |col|
-        [row, col]
-      end
-    end.sort_by do |position|
-      position.last == @column ? 0 : 1
-    end
+    ALL_POSITIONS.shuffle
   end
 end
 
 class BruteReducer < BaseReducer
   def reduce
     best = @sudoku
-    best.each_filled do |col, row|
+    best.each_filled.to_a.shuffle.each do |col, row|
       attempt = best.remove(col, row)
       if attempt.solve.solved?
         best = attempt
@@ -88,25 +46,20 @@ class Reducer < BaseReducer
   RANDOM_PASSES = ENV['ITERATIONS'] ? ENV['ITERATIONS'].to_i : 1000
 
   def reduce
-    best = @sudoku
-
-    each_solution do |solution|
-      if solution.score > best.score
-        best = solution
-      end
+    select_best passes: RANDOM_PASSES do
+      current = select_best(passes: 100) { RandomReducer.new(@sudoku).reduce }
+      BruteReducer.new(current).reduce
     end
-
-    best = BruteReducer.new(best).reduce
-
-    best
   end
 
-  private
-
-  def each_solution
-    RANDOM_PASSES.times { yield RandomRowsFirstReducer.new(@sudoku).reduce }
-    RANDOM_PASSES.times { yield RandomColsFirstReducer.new(@sudoku).reduce }
-    (0...9).each { |row| yield RowReducer.new(@sudoku, row).reduce }
-    (0...9).each { |col| yield ColumnReducer.new(@sudoku, col).reduce }
+  def select_best(passes: 10)
+    best = yield
+    (passes - 1).times do
+      attempt = yield
+      if attempt.score > best.score
+        best = attempt
+      end
+    end
+    best
   end
 end
