@@ -61,7 +61,7 @@ class Sudoku
     boxes.all? { |box| box.compact.length == box.uniq.compact.length }
   end
 
-  def possiblities_for(column, row)
+  def possibilities_for(column, row)
     return [at(column, row)] if at(column, row)
     DIGITS -
       self.column(column) -
