@@ -35,4 +35,32 @@ class Sudoku
     cloned_rows[row][column] = nil
     Sudoku.new cloned_rows
   end
+
+  def boxes
+    [0..2, 3..5, 6..8].flat_map do |rows|
+      [0..2, 3..5, 6..8].map do |cols|
+        rows.flat_map do |row|
+          rows[row][cols]
+        end
+      end
+    end
+  end
+
+  def to_s
+    divider = "+-------+-------+-------+\n"
+
+    divider + rows.map do |row|
+      row.each_slice(3).map do |x|
+        x.join(" ")
+      end.join(" | ")
+    end.map do |row|
+      "| #{row} |\n"
+    end.each_slice(3).map do |x|
+      x.join
+    end.join(divider) + divider
+  end
+
+  def inspect
+    "#<Sudoku:%x \n%s>" % [object_id, to_s]
+  end
 end
