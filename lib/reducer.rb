@@ -1,8 +1,10 @@
-class RandomReducer
+class BaseReducer
   def initialize(sudoku)
     @sudoku = sudoku
   end
+end
 
+class RandomReducer < BaseReducer
   def reduce
     best = @sudoku
     each_position.each do |row, col|
@@ -19,15 +21,11 @@ class RandomReducer
       (0...9).map do |col|
         [row, col]
       end
-    end.shuffle
+    end.reverse
   end
 end
 
-class Reducer
-  def initialize(sudoku)
-    @sudoku = sudoku
-  end
-
+class Reducer < BaseReducer
   def reduce
     best = @sudoku
     100.times do
