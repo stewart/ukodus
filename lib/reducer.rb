@@ -27,15 +27,41 @@ class RandomReducer < SimpleReducer
   end
 end
 
+class RowReducer < SimpleReducer
+  def initialize(sudoku, row)
+    @sudoku = sudoku
+    @row = row
+  end
+
+  # FIXME this isn't right
+  def each_position
+    (0...9).flat_map do |row|
+      (0...9).map do |col|
+        [row, col]
+      end
+    end.reverse
+  end
+end
+
 class Reducer < BaseReducer
   def reduce
     best = @sudoku
-    100.times do
-      current = RandomReducer.new(@sudoku).reduce
-      if current.score > best.score
-        best = current
+
+    solutions.each do |solution|
+      if solution.score > best.score
+        best = solution
       end
     end
+
     best
+  end
+
+  private
+
+  def solutions
+    [
+      100.times.map { RandomReducer.new(@sudoku).reduce },
+      (0...9).map { |row| RowReducer.new(@sudoku, row).reduce }
+    ].flatten
   end
 end
