@@ -31,9 +31,10 @@ class Sudoku
     rows.flatten.compact.count
   end
 
-  def score
+  def count_missing
     81 - count
   end
+  alias_method :score, :count_missing
 
   def row(n)
     rows[n]
@@ -88,6 +89,17 @@ class Sudoku
     end
   end
 
+  def each_filled
+    return enum_for(__method__) unless block_given?
+
+    (0...9).each do |r|
+      (0...9).each do |c|
+        next unless at(c, r)
+        yield c, r
+      end
+    end
+  end
+
   def remove(column, row)
     set(column, row, nil)
   end
@@ -132,8 +144,12 @@ class Sudoku
     Solver.new(self).solve
   end
 
+  def complete?
+    score == 0
+  end
+
   def solved?
-    score == 0 && valid?
+    complete? && valid?
   end
 
   def ==(other)

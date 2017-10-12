@@ -71,6 +71,19 @@ class ColumnReducer < SimpleReducer
   end
 end
 
+class BruteReducer < BaseReducer
+  def reduce
+    best = @sudoku
+    best.each_filled do |col, row|
+      attempt = best.remove(col, row)
+      if attempt.solve.solved?
+        best = attempt
+      end
+    end
+    best
+  end
+end
+
 class Reducer < BaseReducer
   RANDOM_PASSES = ENV['ITERATIONS'] ? ENV['ITERATIONS'].to_i : 1000
 
@@ -82,6 +95,8 @@ class Reducer < BaseReducer
         best = solution
       end
     end
+
+    best = BruteReducer.new(best).reduce
 
     best
   end
