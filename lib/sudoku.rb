@@ -3,8 +3,14 @@ require 'problems'
 class Sudoku
   attr_reader :rows
 
+  def self.all
+    PROBLEMS.map do |problem|
+      new problem
+    end
+  end
+
   def self.first
-    new PROBLEMS.first
+    all.first
   end
 
   def initialize(rows)
