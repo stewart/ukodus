@@ -40,14 +40,19 @@ class Sudoku
   end
 
   def column(n)
-    columns[n]
+    rows.map do |row|
+      row[n]
+    end
   end
   alias_method :col, :column
 
   def box(column, row)
     column /= 3
     row /= 3
-    boxes[row * 3 + column]
+
+    rows[row*3..row*3+2].flat_map do |r|
+      r[column*3..column*3+2]
+    end
   end
 
   def valid?
