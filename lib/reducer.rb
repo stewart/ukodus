@@ -76,7 +76,7 @@ end
 class BruteReducer < BaseReducer
   def reduce
     best = @sudoku
-    best.each_filled do |col, row|
+    best.each_filled.to_a.shuffle.each do |col, row|
       attempt = best.remove(col, row)
       if attempt.solve.solved?
         best = attempt
@@ -98,19 +98,12 @@ class Reducer < BaseReducer
       end
     end
 
-    best = BruteReducer.new(best).reduce
-
     best
   end
 
   private
 
   def solutions
-    [
-      RANDOM_PASSES.times.map { RandomRowsFirstReducer.new(@sudoku) },
-      RANDOM_PASSES.times.map { RandomColsFirstReducer.new(@sudoku) },
-      (0...9).map { |row| RowReducer.new(@sudoku, row) },
-      (0...9).map { |col| ColumnReducer.new(@sudoku, col) }
-    ].flatten.pmap(&:reduce)
+    RANDOM_PASSES.times.map { BruteReducer.new(@sudoku) }.pmap(&:reduce)
   end
 end
