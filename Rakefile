@@ -7,3 +7,5 @@ task :console do
   Pry.start
 end
 
+task :solutions do
+end
