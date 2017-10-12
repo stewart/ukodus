@@ -72,6 +72,8 @@ class ColumnReducer < SimpleReducer
 end
 
 class Reducer < BaseReducer
+  RANDOM_PASSES = 1000
+
   def reduce
     best = @sudoku
 
@@ -88,8 +90,8 @@ class Reducer < BaseReducer
 
   def solutions
     [
-      100.times.map { RandomRowsFirstReducer.new(@sudoku).reduce },
-      100.times.map { RandomColsFirstReducer.new(@sudoku).reduce },
+      RANDOM_PASSES.times.map { RandomRowsFirstReducer.new(@sudoku).reduce },
+      RANDOM_PASSES.times.map { RandomColsFirstReducer.new(@sudoku).reduce },
       (0...9).map { |row| RowReducer.new(@sudoku, row).reduce },
       (0...9).map { |col| ColumnReducer.new(@sudoku, col).reduce }
     ].flatten
