@@ -28,3 +28,4 @@ from using the whitelisted resources listed a the bottom.
 You are allowed to read the content on the following pages:
 - https://www.sudokuoftheday.com/techniques/ (and all content within that section)
 - https://en.wikipedia.org/wiki/Sudoku_solving_algorithms
+- https://www.creepywizard.com
