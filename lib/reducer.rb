@@ -19,11 +19,11 @@ end
 
 class RandomReducer < SimpleReducer
   def each_position
-    (0...9).flat_map do |row|
-      (0...9).map do |col|
+    (0...9).to_a.shuffle.flat_map do |row|
+      (0...9).to_a.shuffle.map do |col|
         [row, col]
       end
-    end.shuffle
+    end
   end
 end
 
