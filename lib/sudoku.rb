@@ -25,6 +25,10 @@ class Sudoku
     @rows.fetch(row).fetch(column)
   end
 
+  def count
+    rows.flatten.compact.count
+  end
+
   def valid?
     rows.all? { |row| row.compact.length == row.uniq.compact.length } &&
     columns.all? { |column| column.compact.length == column.uniq.compact.length } &&
